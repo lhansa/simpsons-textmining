@@ -47,3 +47,16 @@ for (var in names(df_pivot)) {
 df_pivot
 
 
+## Componentes principales ----------------------------------------------------
+
+
+gc()
+componentes <- prcomp(x = select(df_pivot,-season_episode), scale.=TRUE)
+summary(componentes)
+
+df_componentes <- componentes$x %>% 
+  as_tibble() %>% 
+  select(PC1:PC30) %>% 
+  mutate(season_episode = df_pivot$season_episode)
+
+df_componentes
