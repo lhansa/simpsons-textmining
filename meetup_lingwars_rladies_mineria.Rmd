@@ -1,31 +1,31 @@
 ---
-title: "R-Ladies + Lingwars: Taller de minería de textos con R"
-subtitle: "R-Ladies Madrid, Verónica García y Claudia Guirao, 17/10/2017"
+title: "R-Ladies + Lingwars: Taller de minerÃ­a de textos con R"
+subtitle: "R-Ladies Madrid, VerÃ³nica GarcÃ­a y Claudia Guirao, 17/10/2017"
 output: 
   html_notebook: 
     fig_caption: yes
     fig_width: 8
     toc: yes
 ---
-## ¿Quiénes somos?
+## Â¿QuiÃ©nes somos?
 
-- **Verónica García**, @yryaa 
+- **VerÃ³nica GarcÃ­a**, @yryaa 
 - **Claudia Guirao**, @claudiaguirao 
 
 RLadies y Data Scientists en **Kernel Analytics** 
 
-Código y datos en https://github.com/intiveda/rladies_textmining 
+CÃ³digo y datos en https://github.com/intiveda/rladies_textmining 
 
 ## Text Mining & NLP
 
-Gran parte de los datos se encuentran no estructurados, es importante conocer técnicas que nos permitan obtener conclusiones a partir de los mensajes que generan nuestras organizaciones, clientes o usuarios. 
+Gran parte de los datos se encuentran no estructurados, es importante conocer tÃ©cnicas que nos permitan obtener conclusiones a partir de los mensajes que generan nuestras organizaciones, clientes o usuarios. 
 
-Hoy aprenderemos algunas técnicas básicas para manipular cadenas de texto y aplicaremos técnicas de NLP a subtítulos para obtener algunas conclusiones. 
+Hoy aprenderemos algunas tÃ©cnicas bÃ¡sicas para manipular cadenas de texto y aplicaremos tÃ©cnicas de NLP a subtÃ­tulos para obtener algunas conclusiones. 
 
-## Materiales y librerías 
+## Materiales y librerÃ­as 
 
-* Subtítulos temporadas de los Simpsons
-* Librerías:
+* SubtÃ­tulos temporadas de los Simpsons
+* LibrerÃ­as:
  + ```stringr```
  + ```subtools```
  + ```tm```
@@ -46,9 +46,9 @@ Puedes seguir este tutorial de dos formas:
 1. Escuchando activamente, para probar luego en casa :)
 2. De forma activa, ejecutando en tu equipo:
 * Descarga el notebook del repositorio. 
-* Abre el archivo ```.Rmd``` en R Studio (para poder ejecutar notebooks necesitarás algunas dependencias)
+* Abre el archivo ```.Rmd``` en R Studio (para poder ejecutar notebooks necesitarÃ¡s algunas dependencias)
 * Fija el __working directory__ dentro de la carpeta ```rladies_textmining```: ```setwd("eldirectoriodondehasdescargadoelrepo/rladies_textmining/")```
-* Chequea que tienes las librerías instaladas. 
+* Chequea que tienes las librerÃ­as instaladas. 
 
 ```{r, echo=TRUE, warning=TRUE}
 c(
@@ -72,18 +72,18 @@ c(
 
 ## Back2basics: Strings y expresiones regulares
 
-Las cadenas o strings cumplen un papel importante en las tareas de ETL o preparación de los datos. Una de las librerías esenciales en la materia es **stringr**  
+Las cadenas o strings cumplen un papel importante en las tareas de ETL o preparaciÃ³n de los datos. Una de las librerÃ­as esenciales en la materia es **stringr**  
 
-```Stringr``` es uno de los paquetes diseñados por Hadley Wickham para asistir en las tareas de manipulación de strings:
+```Stringr``` es uno de los paquetes diseÃ±ados por Hadley Wickham para asistir en las tareas de manipulaciÃ³n de strings:
 
 + se integra con _pipes_ (%<%)
-+ sus funciones son consistentes y fáciles de interpretar
++ sus funciones son consistentes y fÃ¡ciles de interpretar
 
-### ¿Qué son las cadenas de texto o _strings_?
+### Â¿QuÃ© son las cadenas de texto o _strings_?
 
 + Las cadenas de texto se encuentran contenidas entre comillas `""` (*usar la comilla simple `'` para escapar la doble comilla)
-+ Pueden contener letras `"a"`, números `"1"`, símbolos `"&"` o todo lo anterior `"1a&"`
-+ Mientras que los números puede ser a la vez _integers_ y _characters_, las letras y los símbolos no tienen significado como integer y se traducen en `NA`
++ Pueden contener letras `"a"`, nÃºmeros `"1"`, sÃ­mbolos `"&"` o todo lo anterior `"1a&"`
++ Mientras que los nÃºmeros puede ser a la vez _integers_ y _characters_, las letras y los sÃ­mbolos no tienen significado como integer y se traducen en `NA`
 
 ```{r as.integer, warning=FALSE}
 as.integer(c("a", "&", "123"))
@@ -92,15 +92,15 @@ as.integer(c("a", "&", "123"))
 ```{r list1}
 c(factor("a"), "b", "&",1)
 ```
-Concatenar integers y characters, convierte automáticamente los integers en _characters_.   
+Concatenar integers y characters, convierte automÃ¡ticamente los integers en _characters_.   
 
 ```{r list2}
 c(as.character(factor("a")), "b", "&",1)
 ```
 
-### Operaciones básicas
+### Operaciones bÃ¡sicas
 
-#### Importar la librería
+#### Importar la librerÃ­a
 ```{r imports, warning=FALSE}
 # install.packages("stringr")
 library(stringr)
@@ -108,15 +108,15 @@ library(stringr)
 
 #### Operadores
 
-Muchas de estas funciones tiene su equivalente en R base, pueden ser más lentas/menos eficientes.
+Muchas de estas funciones tiene su equivalente en R base, pueden ser mÃ¡s lentas/menos eficientes.
 
-+ `str_to_upper(string)`: convierte un string en mayúsculas
-+ `str_to_lower(string)`: convierte un string en minúsculas
++ `str_to_upper(string)`: convierte un string en mayÃºsculas
++ `str_to_lower(string)`: convierte un string en minÃºsculas
 + `str_to_title(string)`: capitaliza un string
 
 
 ```{r temas}
-temas <- c("Código", "Mujeres", "tecnología", "Informática", "estadística", "Women", "Coders", "Aprendizaje", "automático", "Análisis", "datos", "Visualización", "R-Ladies", "Social", "Coding", "R", "Ciencia", "Programming")
+temas <- c("CÃ³digo", "Mujeres", "tecnologÃ­a", "InformÃ¡tica", "estadÃ­stica", "Women", "Coders", "Aprendizaje", "automÃ¡tico", "AnÃ¡lisis", "datos", "VisualizaciÃ³n", "R-Ladies", "Social", "Coding", "R", "Ciencia", "Programming")
 ```
 
 ```{r mayus}
@@ -130,42 +130,42 @@ str_to_title(temas)
 ```
 
 + `str_c(string, sep = "")`: junta varios string en uno solo, es el equivalente a `paste(sep = "")` o `paste0()`
-+ `str_length(string)`: devuelve la longitud del string, es similar a la función `nchar()`. Convierte los factores en strings y conserva los NA's
++ `str_length(string)`: devuelve la longitud del string, es similar a la funciÃ³n `nchar()`. Convierte los factores en strings y conserva los NA's
 
 ```{r length}
 print(str_length('R-Ladies'))
 print(str_length(NA))
 ```
 
-+ `str_sub(string, start, end)`: subsetea un string o un vector de string especificando la posición inicial y la final, es el equivalente en R base a substr(). Por defecto finaliza en el último caracter.
++ `str_sub(string, start, end)`: subsetea un string o un vector de string especificando la posiciÃ³n inicial y la final, es el equivalente en R base a substr(). Por defecto finaliza en el Ãºltimo caracter.
 
 ```{r subsetting2}
 print(temas[1:4])
 str_sub(string = temas[1:4], start=3)
 ```
-+ `str_dup(string, times)`: copia y pega un string un número determinado de veces
++ `str_dup(string, times)`: copia y pega un string un nÃºmero determinado de veces
 ```{r duplicating}
 str_dup(string = temas[1:4], times = 3)
 ```
 
-+ `str_trim(string, side = c("both", "left", "rigth"))`: elimina los espacios vacíos, por defecto toma el valor _both_. Mejor evitar `gsub(" ", "", string)`
-+ `str_pad(string, width, side = c("left", "both", "right"), pad = " "))`: añade a strings espacios en blanco para igualarlos en longitud, especialmente útil para añadir 0 a números. 
++ `str_trim(string, side = c("both", "left", "rigth"))`: elimina los espacios vacÃ­os, por defecto toma el valor _both_. Mejor evitar `gsub(" ", "", string)`
++ `str_pad(string, width, side = c("left", "both", "right"), pad = " "))`: aÃ±ade a strings espacios en blanco para igualarlos en longitud, especialmente Ãºtil para aÃ±adir 0 a nÃºmeros. 
 
 ### Expresiones regulares
 
-Las expresiones regulares ( _regular expressions_, _regex_, _pattern matching_) son un lenguaje usado para parsear y manipular texto. Se usan comúnmente para hacer operaciones de búsqueda y reemplazo y para validar si un texto está bien formado.  
+Las expresiones regulares ( _regular expressions_, _regex_, _pattern matching_) son un lenguaje usado para parsear y manipular texto. Se usan comÃºnmente para hacer operaciones de bÃºsqueda y reemplazo y para validar si un texto estÃ¡ bien formado.  
 
 ##### Expresiones comunes
 
 - "a"  = letra "a"
 - "^a" = empieza con la letra "a"
 - "a$" = finaliza con la letra "a"
-- "[ ]" = contiene cualquier letra (o número) de las contenidas en los corchetes
-- "[ - ]" = contiene cualquier letra (o número) dentro de un rango
-- "[^ae]" = cualquier cosa excepto determinadas letras (o números)
-- "{3}" = repite la expresión regular 3 veces  
+- "[ ]" = contiene cualquier letra (o nÃºmero) de las contenidas en los corchetes
+- "[ - ]" = contiene cualquier letra (o nÃºmero) dentro de un rango
+- "[^ae]" = cualquier cosa excepto determinadas letras (o nÃºmeros)
+- "{3}" = repite la expresiÃ³n regular 3 veces  
 
-Las expresiones regulares son un mundo en si mismo, aquí tienes una pequeña _chuleta_ : https://www.rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf   
+Las expresiones regulares son un mundo en si mismo, aquÃ­ tienes una pequeÃ±a _chuleta_ : https://www.rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf   
 
 
 ```{r regex}
@@ -186,7 +186,7 @@ str_locate(cleanR, "tidy")
 
 ##### Otras funciones 
 + `str_extract(string, pattern)` o `str_extract_all()`: busca la palabra exacta (normalmente se utiliza con expresiones regulares concatenadas)
-+ `str_match(string, pattern)` o `str_match_all()`: es una función equivalente pero devuelve una matriz
++ `str_match(string, pattern)` o `str_match_all()`: es una funciÃ³n equivalente pero devuelve una matriz
 
 ```{r regex5}
 str_match(c("12345678", "12587465", "dni desconocido"), pattern = "[1-9]{8}")
@@ -198,26 +198,26 @@ str_match_all(c("12345678", "12587465", "dni desconocido"), pattern = "[1-9]{8}"
 
 + `str_replace(string, pattern, replacement)`: reemplaza la primera instancia, `str_replace_all` para reemplazarlas todas
 ```{r regex7}
-str_replace(c("castanya", "otonyo", "veronyo", "anyo", "nyonyo"), pattern = "ny", replacement = "ñ")
+str_replace(c("castanya", "otonyo", "veronyo", "anyo", "nyonyo"), pattern = "ny", replacement = "Ã±")
 ```
 ```{r regex8}
-str_replace_all(c("castanya", "otonyo", "veronyo", "anyo", "nyonyo"), pattern = "ny", replacement = "ñ")
+str_replace_all(c("castanya", "otonyo", "veronyo", "anyo", "nyonyo"), pattern = "ny", replacement = "Ã±")
 ```
-+ `str_split(string, pattern)`: separa una cadena en un vector, `str_split_fixed(string, pattern, n)` lo hace en un número `n` determinado de elementos
++ `str_split(string, pattern)`: separa una cadena en un vector, `str_split_fixed(string, pattern, n)` lo hace en un nÃºmero `n` determinado de elementos
 
 ```{r regex9}
 print(str_split("Eres muy chu chu chuli",pattern = " "))
 print(length(str_split("Eres muy chu chu chuli",pattern = " ")[[1]]))
 ```
 
-## Analizando texto con R: los Simpsons fuente de sabiduría
+## Analizando texto con R: los Simpsons fuente de sabidurÃ­a
 
 ### Leer los subtitutos
 
-La librería `subtools` permite leer archivos `.str` y  `.sub`, así como organizar cada diálogo en un data frame.   
-Los archivos han de estar organizados en directorios por temporadas y cada uno ha de estar nombrado como `S01xE01` para que se parsee correctamente el número de temporada y de episodio.  
+La librerÃ­a `subtools` permite leer archivos `.str` y  `.sub`, asÃ­ como organizar cada diÃ¡logo en un data frame.   
+Los archivos han de estar organizados en directorios por temporadas y cada uno ha de estar nombrado como `S01xE01` para que se parsee correctamente el nÃºmero de temporada y de episodio.  
 
-Nos centraremos en las 9 primeras temporadas de los Simpsons. Si descargamos la puntuación y representamos gráficamente el promedio del score por temporada, se observa un claro descenso a partir de la 10. 
+Nos centraremos en las 9 primeras temporadas de los Simpsons. Si descargamos la puntuaciÃ³n y representamos grÃ¡ficamente el promedio del score por temporada, se observa un claro descenso a partir de la 10. 
 Por otro lado son las temporadas que mejor conocemos gracias a sus numerosas repeticiones :)  
 
 
@@ -228,7 +228,7 @@ knitr::include_graphics("./images/ratings.png",dpi = 100)
 
 
 
-A  continuación leemos los subtítulos ( _en inglés_ ) de las 9 primeras temporadas de los Simpsons.   
+A  continuaciÃ³n leemos los subtÃ­tulos ( _en inglÃ©s_ ) de las 9 primeras temporadas de los Simpsons.   
 
 
 ```{r subtools, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -241,14 +241,14 @@ df <- df[complete.cases(df), ]
 str(df)
 ```
 
-### Primer análisis: tm
+### Primer anÃ¡lisis: tm
 
-Una primera opción es emplear la librería `tm` para nuestro análisis. La función `tm_map` nos va a permitir preparar nuestor documento para el análisis:
+Una primera opciÃ³n es emplear la librerÃ­a `tm` para nuestro anÃ¡lisis. La funciÃ³n `tm_map` nos va a permitir preparar nuestor documento para el anÃ¡lisis:
 
 + conformar un corpus (conjunto estructurado de textos / documentos )
-+ transformar en minúsculas nuestro texto
-+ eliminar los signos de puntuación
-+ eliminar los números
++ transformar en minÃºsculas nuestro texto
++ eliminar los signos de puntuaciÃ³n
++ eliminar los nÃºmeros
 + eliminar las _stopwords_ 
 + eliminar los espacios en blanco
 
@@ -263,7 +263,7 @@ c <- tm_map(c, stripWhitespace)
 c
 ```
 
-El segundo paso, una vez preparado nuestro corpus, será el de construir la matriz de términos documentos. Para simplificar el análisis cada temporada constituirá un documento. De esta forma obtenemos para cada término la frecuencia por temporada.  
+El segundo paso, una vez preparado nuestro corpus, serÃ¡ el de construir la matriz de tÃ©rminos documentos. Para simplificar el anÃ¡lisis cada temporada constituirÃ¡ un documento. De esta forma obtenemos para cada tÃ©rmino la frecuencia por temporada.  
 
 ```{r, , message=FALSE, warning=FALSE}
 TDM <- TermDocumentMatrix(c)
@@ -274,7 +274,7 @@ colnames(TDM.season) <- paste0("S_", unique(vec.season))
 head(TDM.season)
 ```
 
-A continuación representamos en una nube de términos dichas frecuencias: el tamaño indica el número de repeticiones y el color la temporada en la que más repeticiones presenta. La posición del término respecto de la etiqueta de temporada indica también la frecuencia por temporada.   
+A continuaciÃ³n representamos en una nube de tÃ©rminos dichas frecuencias: el tamaÃ±o indica el nÃºmero de repeticiones y el color la temporada en la que mÃ¡s repeticiones presenta. La posiciÃ³n del tÃ©rmino respecto de la etiqueta de temporada indica tambiÃ©n la frecuencia por temporada.   
 
 ```{r, echo=TRUE, message=TRUE, warning=FALSE}
 library(wordcloud)
@@ -284,11 +284,11 @@ comparison.cloud(TDM.season, title.size = 1, max.words = 200, random.order = T)
 
 ### Text mining con tidytext
 
-La librería tidytext nos permite realizar operaciones como tf (frecuencia de términos) o tf_idf (frecuencia de término - frecuencia inversa de documento) con mayor agilidad.   
+La librerÃ­a tidytext nos permite realizar operaciones como tf (frecuencia de tÃ©rminos) o tf_idf (frecuencia de tÃ©rmino - frecuencia inversa de documento) con mayor agilidad.   
   
 #### Preparar el corpus
 
-De nuevo vamos a preparar el nuestros diálogos para el análisis eliminado las stopwords.
+De nuevo vamos a preparar el nuestros diÃ¡logos para el anÃ¡lisis eliminado las stopwords.
 
 ```{r eliminar stopwords, echo=TRUE, message=FALSE, warning=TRUE}
 library(tidytext)
@@ -301,7 +301,7 @@ tidy_df <- df %>%
   dplyr::anti_join(stop_words)
 ```
 
-Eliminamos además aquellas "palabras" constituidas exclusivamente por números y la palabra simpson.  
+Eliminamos ademÃ¡s aquellas "palabras" constituidas exclusivamente por nÃºmeros y la palabra simpson.  
 
 ```{r  cleaning, warning=FALSE,echo=TRUE}
 library(data.table)
@@ -312,10 +312,10 @@ tidy_df <- tidy_df[word != 'simpson']
 
 #### Term frequency
 
-Con nuestro data set limpio podemos representar en un gráfico de barras la frecuencia de términos. Lo que haremos será:
+Con nuestro data set limpio podemos representar en un grÃ¡fico de barras la frecuencia de tÃ©rminos. Lo que haremos serÃ¡:
 
 + agrupar por temporada
-+ sumar el número de veces que aparece el término (`count`)
++ sumar el nÃºmero de veces que aparece el tÃ©rmino (`count`)
 + tomar el top 10 por temporada
 + representar en un _barplot_ para cada temporada dicha frecuencia
 
@@ -334,8 +334,8 @@ tidy_df %>% group_by(season) %>%
         scale_fill_brewer(palette = "Set1")
 ```
 
-Ahora que disponemos de la frecuencia podemos analizar la evolución en sus apariciones / tramas de cada personaje:
-+ calculamos la frecuencia para todos los términos, no solo el top 15
+Ahora que disponemos de la frecuencia podemos analizar la evoluciÃ³n en sus apariciones / tramas de cada personaje:
++ calculamos la frecuencia para todos los tÃ©rminos, no solo el top 15
 + creamos dos listas, la familia Simpson y otros personajes relevantes de la trama
 + representamos ambas series series temporales 
 
@@ -366,7 +366,7 @@ ggplotly(myplot)
 
 #### Bigramas
 
-También podemos obtener y representar los bigramas (conjunto de 2 términos) y sus frecuencias. Se representan en forma de grafo los más comunes (aquellos que aparecen al menos 7 veces en una misma temporada)
+TambiÃ©n podemos obtener y representar los bigramas (conjunto de 2 tÃ©rminos) y sus frecuencias. Se representan en forma de grafo los mÃ¡s comunes (aquellos que aparecen al menos 7 veces en una misma temporada)
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 library(tidyr)
@@ -408,7 +408,7 @@ ggraph(bigram_graph, layout = "fr") +
 
 ####
 
-También podemos realizar tf_idf sobre nuestro corpus para localizar las palabras más relevantes, en general y por temporada
+TambiÃ©n podemos realizar tf_idf sobre nuestro corpus para localizar las palabras mÃ¡s relevantes, en general y por temporada
 
 ```{r tf_idf, , echo=TRUE, fig.height=10, fig.width=10, message=TRUE, warning=FALSE}
 library(dplyr)
@@ -438,12 +438,12 @@ tf_idf_df %>%
   coord_flip()
 ```
 
-#### Análisis de sentimiento
+#### AnÃ¡lisis de sentimiento
 
-Valorar como positivo o negativo un mensaje es una tarea compleja, que requiere no sólo conocer el __significado__ de las palabras sino también contextualizarlas, conocer la entonación en que se produce el mensaje, etc. 
+Valorar como positivo o negativo un mensaje es una tarea compleja, que requiere no sÃ³lo conocer el __significado__ de las palabras sino tambiÃ©n contextualizarlas, conocer la entonaciÃ³n en que se produce el mensaje, etc. 
 
-En este caso vamos a realizar una aproximación mucho más simple, que es la de considerar el texto como la combinación de palabras individuales y el sentimiento como la suma del sentimiento asociado a cada una de las palabras. Para ello ```tidytext```nos ofrece tres posibles datasets (lexicon) de sentimientos:
-+ AFINN from Finn Årup Nielsen (-5, 5),
+En este caso vamos a realizar una aproximaciÃ³n mucho mÃ¡s simple, que es la de considerar el texto como la combinaciÃ³n de palabras individuales y el sentimiento como la suma del sentimiento asociado a cada una de las palabras. Para ello ```tidytext```nos ofrece tres posibles datasets (lexicon) de sentimientos:
++ AFINN from Finn Ã…rup Nielsen (-5, 5),
 + bing from Bing Liu and collaborators("positive" / "negative")
 + nrc from Saif Mohammad and Peter Turney ("yes" / "no").
 
@@ -539,7 +539,7 @@ ggplot(data=comparativa, aes(x=method, y=sentiment)) +
 
 
 
-## Anexos y otra información útil
+## Anexos y otra informaciÃ³n Ãºtil
 
 + Tidy text: http://tidytextmining.com
 + Stringr and Regex: https://rstudio-pubs-static.s3.amazonaws.com/180610_d3764c43f1e54692b7e84d21ec94772a.html
@@ -552,4 +552,4 @@ ggplot(data=comparativa, aes(x=method, y=sentiment)) +
 ```{r thankyou, echo=FALSE, out.width="150px"}
 knitr::include_graphics("./images/thanks_homer.jpg",dpi = 100)
 ```
-_Si estás leyendo esto en diferido y tienes preguntas no dudes en localizarnos en Twitter_
+_Si estÃ¡s leyendo esto en diferido y tienes preguntas no dudes en localizarnos en Twitter_
