@@ -84,21 +84,55 @@ clobjeto <- df_componentes %>%
 
 ## Exploración de resultados ---------------------------------------
 
-df_pivot %>% 
-  mutate(cluster = clobjeto$cluster) %>% 
-  count(cluster)
+df_episodio_cluster <- df_pivot %>% 
+  select(season_episode) %>% 
+  mutate(cluster = clobjeto$cluster)
 
-df <- df_pivot %>% 
-  mutate(cluster = clobjeto$cluster) %>% 
-  gather("word","conteo",-season_episode, -cluster)
+
+ggplot(df_episodio_cluster, aes(x = factor(cluster))) + 
+  geom_bar()
+
+# df <- df_pivot %>% 
+#   gather("word","conteo",-season_episode, -cluster)
+
+df <- df %>% 
+  left_join(df_episodio_cluster, by = "season_episode")
+
+
+## Distribución de palabras por cluster -----------------------------------
 
 df %>% 
-  arrange(cluster, desc(conteo))
+  group_by(cluster, word) %>% 
+  summarise(conteo = sum(n)) %>% 
+  arrange(cluster, desc(conteo)) %>% 
+  summarise(n(), sum(conteo))
+
+library(manipulate)
+
+manipulate(
+  df %>% 
+    group_by(cluster, word) %>% 
+    summarise(conteo = sum(n)) %>% 
+    arrange(cluster, desc(conteo)) %>% 
+    do(head(.,50)) %>% 
+    filter(cluster == cl) %>% 
+    ggplot(aes(x = reorder(word, desc(conteo)), y = conteo)) + 
+    geom_col() +
+    theme(axis.text.x = element_text(angle = 90)), 
+  cl = slider(1,4)
+)
+
+
+
+
 
 ## Wordcloud --------------------------------------------------------
 
-aux <- df %>% 
-  filter(cluster == 1)
-  
+# genera_wordcloud <- function(n_cluster){
+#   aux <- df %>% 
+#     filter(cluster == n_cluster)
+# 
+#   wordcloud(aux$word, aux$conteo)
+# }
+# 
 
-wordcloud(aux$word, aux$conteo)
