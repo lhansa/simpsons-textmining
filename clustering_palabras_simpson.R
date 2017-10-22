@@ -1,6 +1,7 @@
 rm(list=ls()); gc()
 
 library(tidyverse)
+library(stringr)
 library(subtools)
 library(tidytext)
 library(glue)
