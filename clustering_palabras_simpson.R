@@ -53,6 +53,9 @@ for (var in names(df_pivot)) {
 
 ## Componentes principales ----------------------------------------------------
 
+df_pivot %>% 
+  select_if(.predicate = function(x) any(x > 1))
+
 
 gc()
 componentes <- prcomp(x = select(df_pivot,-season_episode), scale.=TRUE)
@@ -60,7 +63,7 @@ summary(componentes)
 
 df_componentes <- componentes$x %>% 
   as_tibble() %>% 
-  select(PC1:PC30)
+  select(PC1:PC12)
 
 rm(componentes); gc()
 
