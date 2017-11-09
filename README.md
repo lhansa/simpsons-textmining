@@ -1,9 +1,5 @@
-# R-Ladies + Lingwars: Taller de minería de textos con R
-## R-Ladies Madrid, Verónica García y Claudia Guirao, 17/10/2017
+# Text mining con los Simpson
 
-### ¿Quiénes somos?
+> Idea de R-Ladies Madrid, Verónica García (@yryaa) y Claudia Guirao (@claudiaguirao), 17/10/2017
 
-+ Verónica García, @yryaa
-+ Claudia Guirao, @claudiaguirao
-
-RLadies y Data Scientists en Kernel Analytics
+A partir del taller de TM de R-ladies Madrid, aplicamos algoritmos de cluster sobre los subtítulos de los Simpson. Si saliera bien, que todavía no, identificaríamos las temáticas de los capítulos. 
