@@ -66,12 +66,12 @@ df <- df %>%
 #   add_count(word) %>% 
 #   filter(nn > limite_inferior)
 
-df %>% 
-  add_count(word) %>% 
-  filter(nn >= quantile(nn, probs = 0.9)) %>% 
-  distinct(word, nn) %>% 
-  arrange(desc(nn)) %>% 
-  print(n = 50)
+# df %>% 
+#   add_count(word) %>% 
+#   filter(nn >= quantile(nn, probs = 0.9)) %>% 
+#   distinct(word, nn) %>% 
+#   arrange(desc(nn)) %>% 
+#   print(n = 50)
 
 df_filtrado <- df %>% 
   add_count(word) %>% 
@@ -146,6 +146,7 @@ df <- df %>%
 
 palabras_por_cluster()
 
+grid.arrange(grobs = palabras_por_cluster(50), ncol = num_clusters)
 
 df %>% 
   group_by(cluster, word) %>% 
@@ -153,24 +154,7 @@ df %>%
   arrange(cluster, desc(conteo)) %>% 
   summarise(n(), sum(conteo))
 
-# library(manipulate)
-# 
-# manipulate(
-#   df %>% 
-#     group_by(cluster, word) %>% 
-#     summarise(conteo = sum(n)) %>% 
-#     arrange(cluster, desc(conteo)) %>% 
-#     do(head(.,50)) %>% 
-#     filter(cluster == cl) %>% 
-#     ggplot(aes(x = reorder(word, conteo), y = conteo)) + 
-#     geom_col() +
-#     coord_flip() + 
-#     labs(title = glue("Cluster {cl}"), x = "Palabra", y = "Frecuencia") +
-#     theme(axis.text.x = element_text(angle = 0)),
-#   cl = slider(1,4)
-# )
 
-grid.arrange(grobs = palabras_por_cluster(20), ncol = 3)
 
 
 
