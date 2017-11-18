@@ -9,9 +9,18 @@ library(wordcloud)
 library(gridExtra)
 
 source("src/palabras_por_cluster.R")
-palabras_molestas <- c("hey", "uh", "ah", "hmm", "huh")
+palabras_molestas <- c("hey", "uh", "ah", "hmm", "huh", "yeah")
 
-filtra_molestas <- function(.data) .data %>% filter(!word %in% palabras_molestas)
+simpson_family <- c('homer', 'bart', 'lisa', 'maggie', 'marge', 'patty','selma')
+other_characters <-  c('moe', 'ned', 'barney', 'modd', 'itchy', 'scratchy', 'krusty', 'burns', 'lenny', 'carl', 'edna', 'nelson', 'apu', 'milhouse', 'ralph', 'skinner', 'bob')
+
+
+filtra_molestas <- function(.data){
+  .data %>% 
+    filter(!word %in% palabras_molestas) %>% 
+    filter(!word %in% simpson_family) %>% 
+    return()
+}
 
 ## Datos ----------------------------------------------
 
@@ -47,7 +56,7 @@ df <- df %>%
 df <- df %>% 
   ungroup() %>% 
   filter(!grepl("^[[:digit:]]",df$word)) %>% 
-  filter(!word %in% palabras_molestas)
+  filtra_molestas() 
 
 
 ## Nos quedamos solo con las palabras que aparecen cierto número de veces. 
@@ -118,7 +127,7 @@ dots <- map(nombres_componentes, function(var){
     as.formula(glue("~findInterval({var}, vec = cortes({var}))"))
 })
 
-num_clusters <- 3
+num_clusters <- 5
 
 set.seed(31818)
 clobjeto <- df_componentes %>% 
@@ -134,19 +143,13 @@ df_episodio_cluster <- df_pivot %>%
 ggplot(df_episodio_cluster, aes(x = factor(cluster))) + 
   geom_bar()
 
-# df <- df_pivot %>% 
-#   gather("word","conteo",-season_episode, -cluster)
-
 df <- df %>% 
   select(season_num:n) %>% 
   left_join(df_episodio_cluster, by = "season_episode")
 
-
 ## Distribución de palabras por cluster -----------------------------------
 
-palabras_por_cluster()
-
-grid.arrange(grobs = palabras_por_cluster(50), ncol = num_clusters)
+grid.arrange(grobs = palabras_por_cluster(20), ncol = num_clusters)
 
 df %>% 
   group_by(cluster, word) %>% 
