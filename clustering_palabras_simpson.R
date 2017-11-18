@@ -6,8 +6,12 @@ library(subtools)
 library(tidytext)
 library(glue)
 library(wordcloud)
+library(gridExtra)
 
 source("src/palabras_por_cluster.R")
+palabras_molestas <- c("hey", "uh", "ah", "hmm", "huh")
+
+filtra_molestas <- function(.data) .data %>% filter(!word %in% palabras_molestas)
 
 ## Datos ----------------------------------------------
 
@@ -36,25 +40,28 @@ df <- df %>%
 # df$word %>% unique %>% length
 # df$word %>% unique %>% sort %>% range
 
-## Filtramos palabras que empiecen por dígitos
+## Filtramos palabras que empiecen por dígitos y alguna que molesta
+
+
 
 df <- df %>% 
   ungroup() %>% 
-  filter(!grepl("^[[:digit:]]",df$word))
+  filter(!grepl("^[[:digit:]]",df$word)) %>% 
+  filter(!word %in% palabras_molestas)
 
 
 ## Nos quedamos solo con las palabras que aparecen cierto número de veces. 
 ## Con el resultado calculamos el tf_idf y pivotamos para tener la 
 ## matriz documento término
 
-limite_inferior <- 2
-
-df %>% 
-  count(word) %>% 
-  filter(nn > 2) %>%
-  ggplot(aes(x = nn)) +
-  geom_histogram(binwidth = 5) + 
-  coord_cartesian(xlim = c(0, 20))
+# limite_inferior <- 2
+# 
+# df %>% 
+#   count(word) %>% 
+#   filter(nn > 2) %>%
+#   ggplot(aes(x = nn)) +
+#   geom_histogram(binwidth = 5) + 
+#   coord_cartesian(xlim = c(0, 20))
 # df <- df %>% 
 #   add_count(word) %>% 
 #   filter(nn > limite_inferior)
@@ -62,7 +69,9 @@ df %>%
 df %>% 
   add_count(word) %>% 
   filter(nn >= quantile(nn, probs = 0.9)) %>% 
-  distinct(word)
+  distinct(word, nn) %>% 
+  arrange(desc(nn)) %>% 
+  print(n = 50)
 
 df_filtrado <- df %>% 
   add_count(word) %>% 
@@ -144,23 +153,24 @@ df %>%
   arrange(cluster, desc(conteo)) %>% 
   summarise(n(), sum(conteo))
 
-library(manipulate)
+# library(manipulate)
+# 
+# manipulate(
+#   df %>% 
+#     group_by(cluster, word) %>% 
+#     summarise(conteo = sum(n)) %>% 
+#     arrange(cluster, desc(conteo)) %>% 
+#     do(head(.,50)) %>% 
+#     filter(cluster == cl) %>% 
+#     ggplot(aes(x = reorder(word, conteo), y = conteo)) + 
+#     geom_col() +
+#     coord_flip() + 
+#     labs(title = glue("Cluster {cl}"), x = "Palabra", y = "Frecuencia") +
+#     theme(axis.text.x = element_text(angle = 0)),
+#   cl = slider(1,4)
+# )
 
-manipulate(
-  df %>% 
-    group_by(cluster, word) %>% 
-    summarise(conteo = sum(n)) %>% 
-    arrange(cluster, desc(conteo)) %>% 
-    do(head(.,50)) %>% 
-    filter(cluster == cl) %>% 
-    ggplot(aes(x = reorder(word, conteo), y = conteo)) + 
-    geom_col() +
-    coord_flip() + 
-    labs(title = glue("Cluster {cl}"), x = "Palabra", y = "Frecuencia") +
-    theme(axis.text.x = element_text(angle = 0)),
-  cl = slider(1,4)
-)
-
+grid.arrange(grobs = palabras_por_cluster(20), ncol = 3)
 
 
 
